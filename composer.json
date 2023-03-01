@@ -1,0 +1,17 @@
+{
+    "name": "artarts36/docs-retriever",
+    "autoload": {
+        "psr-4": {
+            "ArtARTs36\\DocsRetriever\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "artarts36",
+            "email": "temicska99@mail.ru"
+        }
+    ],
+    "require": {
+        "artarts36/git-handler": "^1.2"
+    }
+}
