@@ -28,6 +28,10 @@ class Copier
             throw new \LogicException('sourceDir not resolved');
         }
 
+        foreach ($config->copy as $copy) {
+            $this->checkTargetDir($copy->target->directory);
+        }
+
         foreach ($config->copy as $conf) {
             $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $conf->source;
 

@@ -36,22 +36,9 @@ class Retriever
 
         $targetGit->branches()->switch($targetBranch);
 
-        foreach ($config->copy as $copy) {
-            $this->checkTargetDir($copy->target->directory);
-        }
-
         $this->copier->copy($config, $sourceGit, $targetGit);
 
         $targetGit->pushes()->push();
-    }
-
-    private function checkTargetDir(string $dir): void
-    {
-        if ($this->fileSystem->exists($dir)) {
-            return;
-        }
-
-        $this->fileSystem->createDir($dir);
     }
 
     private function createTemporaryBranch(): string
