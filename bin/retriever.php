@@ -15,7 +15,7 @@ $config = new Config(
     [
         'docs/*.md',
     ],
-    __DIR__ . '/docs',
+    __DIR__ . '/../docs',
 );
 
 $retriever->retrieve($config);

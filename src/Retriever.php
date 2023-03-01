@@ -26,15 +26,21 @@ class Retriever
 
         $targetBranch = $this->createTemporaryBranch();
 
+        $this->checkTargetDir($config->targetDir);
+
         try {
             $targetGit->branches()->create($targetBranch);
         } catch (BranchAlreadyExists) {
             // suppress
         }
 
-        foreach ($config->sourcePaths as $path) {
-            foreach (glob($path) as $filePath) {
-                $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+        $targetGit->branches()->switch($targetBranch);
+
+        foreach ($config->sourcePaths as $sPath) {
+            $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $sPath;
+
+            foreach (glob($sourcePath) as $filePath) {
+                $fileName = pathinfo($filePath, PATHINFO_BASENAME);
 
                 $targetPath = $config->targetDir . DIRECTORY_SEPARATOR . $fileName;
 
@@ -44,9 +50,16 @@ class Retriever
             }
         }
 
-        //$targetGit->branches()->switch($targetBranch);
+        $targetGit->pushes()->push();
+    }
 
-        //$targetGit->pushes()->push();
+    private function checkTargetDir(string $dir): void
+    {
+        if ($this->fileSystem->exists($dir)) {
+            return;
+        }
+
+        $this->fileSystem->createDir($dir);
     }
 
     private function createTemporaryBranch(): string
