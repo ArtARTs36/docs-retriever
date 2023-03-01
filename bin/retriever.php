@@ -15,6 +15,7 @@ $retriever = new Retriever(
         new CachedGitFactory(new LocalGitFactory()),
         $fs,
     ),
+    new \ArtARTs36\DocsRetriever\Copier($fs),
     $fs,
 );
 $loader = new Config\Loader\YamlLoader();

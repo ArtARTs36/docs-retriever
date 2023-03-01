@@ -11,6 +11,7 @@ class Retriever
 {
     public function __construct(
         private readonly Creator $creator,
+        private readonly Copier $copier,
         private readonly FileSystem $fileSystem,
     ) {
         //
@@ -39,19 +40,7 @@ class Retriever
             $this->checkTargetDir($copy->target->directory);
         }
 
-        foreach ($config->copy as $conf) {
-            $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $conf->source;
-
-            foreach (glob($sourcePath) as $filePath) {
-                $fileName = pathinfo($filePath, PATHINFO_BASENAME);
-
-                $targetPath = $conf->target->directory . DIRECTORY_SEPARATOR . $fileName;
-
-                copy($filePath, $targetPath);
-
-                $targetGit->index()->add($targetPath);
-            }
-        }
+        $this->copier->copy($config, $sourceGit, $targetGit);
 
         $targetGit->pushes()->push();
     }
