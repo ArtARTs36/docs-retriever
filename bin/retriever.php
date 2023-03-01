@@ -9,13 +9,8 @@ use ArtARTs36\GitHandler\Factory\LocalGitFactory;
 require __DIR__ . '/../vendor/autoload.php';
 
 $retriever = new Retriever(new CachedGitFactory(new LocalGitFactory()), new LocalFileSystem());
+$loader = new Config\Loader\YamlLoader();
 
-$config = new Config(
-    'https://github.com/ArtARTs36/php-merge-request-linter',
-    [
-        'docs/*.md',
-    ],
-    __DIR__ . '/../docs',
-);
+$config = $loader->load(__DIR__ . '/../docs-retriever.yaml');
 
 $retriever->retrieve($config);

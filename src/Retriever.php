@@ -2,6 +2,7 @@
 
 namespace ArtARTs36\DocsRetriever;
 
+use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\FileSystem\Contracts\FileSystem;
 use ArtARTs36\GitHandler\Contracts\Factory\GitHandlerFactory;
 use ArtARTs36\GitHandler\Exceptions\BranchAlreadyExists;
@@ -20,13 +21,11 @@ class Retriever
         $sourceDir = $this->createTemporaryDirectory();
         $sourceGit = $this->gitFactory->factory($sourceDir);
 
-        $sourceGit->setup()->clone($config->sourceRepo);
+        $sourceGit->setup()->clone($config->source->repository);
 
         $targetGit = $this->gitFactory->factory(__DIR__ . '/../');
 
         $targetBranch = $this->createTemporaryBranch();
-
-        $this->checkTargetDir($config->targetDir);
 
         try {
             $targetGit->branches()->create($targetBranch);
@@ -36,13 +35,17 @@ class Retriever
 
         $targetGit->branches()->switch($targetBranch);
 
-        foreach ($config->sourcePaths as $sPath) {
-            $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $sPath;
+        foreach ($config->copy as $copy) {
+            $this->checkTargetDir($copy->target->directory);
+        }
+
+        foreach ($config->copy as $conf) {
+            $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $conf->source;
 
             foreach (glob($sourcePath) as $filePath) {
                 $fileName = pathinfo($filePath, PATHINFO_BASENAME);
 
-                $targetPath = $config->targetDir . DIRECTORY_SEPARATOR . $fileName;
+                $targetPath = $conf->target->directory . DIRECTORY_SEPARATOR . $fileName;
 
                 copy($filePath, $targetPath);
 

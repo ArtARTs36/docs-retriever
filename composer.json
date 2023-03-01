@@ -12,6 +12,7 @@
         }
     ],
     "require": {
-        "artarts36/git-handler": "^1.2"
+        "artarts36/git-handler": "^1.2",
+        "symfony/yaml": "^6.2"
     }
 }
