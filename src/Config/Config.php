@@ -9,6 +9,7 @@ class Config
      */
     public function __construct(
         public readonly ConfigSource $source,
+        public readonly ConfigTarget $target,
         public readonly array $copy,
     ) {
         //

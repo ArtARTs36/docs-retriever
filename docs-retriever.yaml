@@ -1,6 +1,9 @@
 source:
   repository: 'https://github.com/ArtARTs36/php-merge-request-linter'
 
+target:
+  repository: 'self'
+
 copy:
   - source: 'docs/*.md'
     target:

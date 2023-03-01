@@ -3,14 +3,14 @@
 namespace ArtARTs36\DocsRetriever;
 
 use ArtARTs36\DocsRetriever\Config\Config;
+use ArtARTs36\DocsRetriever\Git\Creator;
 use ArtARTs36\FileSystem\Contracts\FileSystem;
-use ArtARTs36\GitHandler\Contracts\Factory\GitHandlerFactory;
 use ArtARTs36\GitHandler\Exceptions\BranchAlreadyExists;
 
 class Retriever
 {
     public function __construct(
-        private readonly GitHandlerFactory $gitFactory,
+        private readonly Creator $creator,
         private readonly FileSystem $fileSystem,
     ) {
         //
@@ -18,12 +18,12 @@ class Retriever
 
     public function retrieve(Config $config): void
     {
-        $sourceDir = $this->createTemporaryDirectory();
-        $sourceGit = $this->gitFactory->factory($sourceDir);
+        $sourceGit = $this->creator->create($config->source);
+        $sourceDir = $sourceGit->getContext()->getRootDir();
 
         $sourceGit->setup()->clone($config->source->repository);
 
-        $targetGit = $this->gitFactory->factory(__DIR__ . '/../');
+        $targetGit = $this->creator->create($config->target);
 
         $targetBranch = $this->createTemporaryBranch();
 
@@ -68,18 +68,5 @@ class Retriever
     private function createTemporaryBranch(): string
     {
         return 'docs-' . time();
-    }
-
-    private function createTemporaryDirectory(): string
-    {
-        $root = $this->fileSystem->getTmpDir();
-
-        $dir = $root . '/temporary-repo';
-
-        if ($this->fileSystem->exists($dir)) {
-            $this->fileSystem->removeDir($dir);
-        }
-
-        return $dir;
     }
 }

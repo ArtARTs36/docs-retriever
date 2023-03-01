@@ -6,6 +6,7 @@ use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\DocsRetriever\Config\ConfigCopy;
 use ArtARTs36\DocsRetriever\Config\ConfigCopyTarget;
 use ArtARTs36\DocsRetriever\Config\ConfigSource;
+use ArtARTs36\DocsRetriever\Config\ConfigTarget;
 use ArtARTs36\DocsRetriever\Config\Loader;
 use Symfony\Component\Yaml\Yaml;
 
@@ -17,6 +18,7 @@ class YamlLoader implements Loader
 
         return new Config(
             new ConfigSource($data['source']['repository']),
+            new ConfigTarget($data['source']['repository']),
             array_map(function (array $copy) {
                 return new ConfigCopy(
                     $copy['source'],

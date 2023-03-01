@@ -8,7 +8,15 @@ use ArtARTs36\GitHandler\Factory\LocalGitFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$retriever = new Retriever(new CachedGitFactory(new LocalGitFactory()), new LocalFileSystem());
+$fs = new LocalFileSystem();
+
+$retriever = new Retriever(
+    new \ArtARTs36\DocsRetriever\Git\Creator(
+        new CachedGitFactory(new LocalGitFactory()),
+        $fs,
+    ),
+    $fs,
+);
 $loader = new Config\Loader\YamlLoader();
 
 $config = $loader->load(__DIR__ . '/../docs-retriever.yaml');
