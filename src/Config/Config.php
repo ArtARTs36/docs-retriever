@@ -2,8 +2,6 @@
 
 namespace ArtARTs36\DocsRetriever\Config;
 
-use ArtARTs36\GitHandler\Config\MergeRequestConfig;
-
 class Config
 {
     /**

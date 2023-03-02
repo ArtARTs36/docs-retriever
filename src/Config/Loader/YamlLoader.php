@@ -9,7 +9,7 @@ use ArtARTs36\DocsRetriever\Config\ConfigCopyTarget;
 use ArtARTs36\DocsRetriever\Config\ConfigSource;
 use ArtARTs36\DocsRetriever\Config\ConfigTarget;
 use ArtARTs36\DocsRetriever\Config\Loader;
-use ArtARTs36\GitHandler\Config\MergeRequestConfig;
+use ArtARTs36\DocsRetriever\Config\MergeRequestConfig;
 use ArtARTs36\GitHandler\Data\Author;
 use Symfony\Component\Yaml\Yaml;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ArtARTs36\GitHandler\Config;
+namespace ArtARTs36\DocsRetriever\Config;
 
 class MergeRequestConfig
 {

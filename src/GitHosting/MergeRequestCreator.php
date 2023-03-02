@@ -2,7 +2,7 @@
 
 namespace ArtARTs36\DocsRetriever\GitHosting;
 
-use ArtARTs36\GitHandler\Config\MergeRequestConfig;
+use ArtARTs36\DocsRetriever\Config\MergeRequestConfig;
 use ArtARTs36\GitHandler\Contracts\Handler\GitHandler;
 
 class MergeRequestCreator
