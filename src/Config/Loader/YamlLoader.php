@@ -18,7 +18,7 @@ class YamlLoader implements Loader
 
         return new Config(
             new ConfigSource($data['repositories']['source']['repository'], $data['repositories']['source']['base_branch'] ?? null),
-            new ConfigTarget($data['repositories']['source']['repository'], $data['repositories']['source']['base_branch'] ?? null),
+            new ConfigTarget($data['repositories']['target']['repository'], $data['repositories']['target']['base_branch'] ?? null),
             array_map(function (array $copy) {
                 return new ConfigCopy(
                     $copy['source'],
