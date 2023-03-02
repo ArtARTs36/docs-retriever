@@ -12,3 +12,8 @@ copy:
       directory: 'docs'
       commit:
         message: 'Add docs from main repository'
+
+merge_request:
+  title: 'Update docs'
+  description: 'Updated docs from main repository'
+  target_branch: 'master'

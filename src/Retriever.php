@@ -4,6 +4,7 @@ namespace ArtARTs36\DocsRetriever;
 
 use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\DocsRetriever\Git\Creator;
+use ArtARTs36\DocsRetriever\GitHosting\MergeRequestCreator;
 use ArtARTs36\GitHandler\Exceptions\BranchAlreadyExists;
 
 class Retriever
@@ -11,6 +12,7 @@ class Retriever
     public function __construct(
         private readonly Creator $creator,
         private readonly Copier $copier,
+        private readonly MergeRequestCreator $mergeRequestCreator,
     ) {
         //
     }
@@ -33,6 +35,8 @@ class Retriever
         $this->copier->copy($config, $sourceGit, $targetGit);
 
         $targetGit->pushes()->push();
+
+        $this->mergeRequestCreator->create($targetGit, $config->mergeRequest);
     }
 
     private function createTemporaryBranch(): string

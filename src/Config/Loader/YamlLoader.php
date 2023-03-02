@@ -9,6 +9,7 @@ use ArtARTs36\DocsRetriever\Config\ConfigCopyTarget;
 use ArtARTs36\DocsRetriever\Config\ConfigSource;
 use ArtARTs36\DocsRetriever\Config\ConfigTarget;
 use ArtARTs36\DocsRetriever\Config\Loader;
+use ArtARTs36\GitHandler\Config\MergeRequestConfig;
 use ArtARTs36\GitHandler\Data\Author;
 use Symfony\Component\Yaml\Yaml;
 
@@ -24,6 +25,12 @@ class YamlLoader implements Loader
             array_map(function (array $copy) {
                 return $this->createConfigCopy($copy);
             }, $data['copy']),
+            new MergeRequestConfig(
+                $data['merge_request']['title'],
+                $data['merge_request']['description'],
+                $data['merge_request']['target_branch'],
+                $data['merge_request']['user'],
+            ),
         );
     }
 
