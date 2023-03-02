@@ -2,12 +2,14 @@
 
 namespace ArtARTs36\DocsRetriever\Config\Loader;
 
+use ArtARTs36\DocsRetriever\Config\Commit;
 use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\DocsRetriever\Config\ConfigCopy;
 use ArtARTs36\DocsRetriever\Config\ConfigCopyTarget;
 use ArtARTs36\DocsRetriever\Config\ConfigSource;
 use ArtARTs36\DocsRetriever\Config\ConfigTarget;
 use ArtARTs36\DocsRetriever\Config\Loader;
+use ArtARTs36\GitHandler\Data\Author;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader implements Loader
@@ -20,14 +22,24 @@ class YamlLoader implements Loader
             new ConfigSource($data['repositories']['source']['repository'], $data['repositories']['source']['base_branch'] ?? null),
             new ConfigTarget($data['repositories']['target']['repository'], $data['repositories']['target']['base_branch'] ?? null),
             array_map(function (array $copy) {
-                return new ConfigCopy(
-                    $copy['source'],
-                    new ConfigCopyTarget(
-                        $copy['target']['directory'],
-                        $copy['target']['commit'],
-                    ),
-                );
+                return $this->createConfigCopy($copy);
             }, $data['copy']),
+        );
+    }
+
+    private function createConfigCopy(array $copy): ConfigCopy
+    {
+        return new ConfigCopy(
+            $copy['source'],
+            new ConfigCopyTarget(
+                $copy['target']['directory'],
+                new Commit(
+                    $copy['target']['commit']['message'],
+                    isset($copy['target']['commit']['author']) ?
+                        new Author($copy['target']['commit']['author']['name'], $copy['target']['commit']['author']['email']) :
+                        null,
+                ),
+            ),
         );
     }
 }

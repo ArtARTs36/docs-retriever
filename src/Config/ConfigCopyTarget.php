@@ -6,7 +6,7 @@ class ConfigCopyTarget
 {
     public function __construct(
         public readonly string $directory,
-        public readonly string $commit,
+        public readonly Commit $commit,
     ) {
         //
     }

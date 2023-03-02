@@ -10,4 +10,5 @@ copy:
   - source: 'docs/*.md'
     target:
       directory: 'docs'
-      commit: 'Add docs from main repository'
+      commit:
+        message: 'Add docs from main repository'

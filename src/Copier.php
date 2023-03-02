@@ -33,6 +33,11 @@ class Copier
         }
 
         foreach ($config->copy as $conf) {
+            if ($conf->target->commit !== null) {
+                $target->config()->set('user', 'name', $conf->target->commit->author->name);
+                $target->config()->set('user', 'email', $conf->target->commit->author->email);
+            }
+
             $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $conf->source;
             $targetPaths = [];
 
@@ -47,7 +52,7 @@ class Copier
             }
 
             $target->index()->add($targetPaths);
-            $target->commits()->commit($conf->target->commit);
+            $target->commits()->commit($conf->target->commit->message, author: $conf->target->commit->author);
         }
     }
 
