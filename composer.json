@@ -13,9 +13,16 @@
     ],
     "require": {
         "artarts36/git-handler": "^1.2",
-        "symfony/yaml": "^6.2"
+        "symfony/yaml": "^6.2",
+        "knplabs/github-api": "^3.9",
+        "symfony/http-client": "^6.2"
     },
     "bin": [
         "bin/retriever.php"
-    ]
+    ],
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
 }
