@@ -34,6 +34,7 @@ class Copier
 
         foreach ($config->copy as $conf) {
             $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $conf->source;
+            $targetPaths = [];
 
             foreach (glob($sourcePath) as $filePath) {
                 $fileName = pathinfo($filePath, PATHINFO_BASENAME);
@@ -42,8 +43,11 @@ class Copier
 
                 copy($filePath, $targetPath);
 
-                $target->index()->add($targetPath);
+                $targetPaths[] = $targetPath;
             }
+
+            $target->index()->add($targetPaths);
+            $target->commits()->commit($conf->target->commit);
         }
     }
 

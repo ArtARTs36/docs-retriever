@@ -10,3 +10,4 @@ copy:
   - source: 'docs/*.md'
     target:
       directory: 'docs'
+      commit: 'Add docs from main repository'

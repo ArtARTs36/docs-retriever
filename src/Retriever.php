@@ -32,6 +32,8 @@ class Retriever
 
         $this->copier->copy($config, $sourceGit, $targetGit);
 
+        $targetGit->commits()->commit('Add');
+
         $targetGit->pushes()->push();
     }
 

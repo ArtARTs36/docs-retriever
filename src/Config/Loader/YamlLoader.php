@@ -24,6 +24,7 @@ class YamlLoader implements Loader
                     $copy['source'],
                     new ConfigCopyTarget(
                         $copy['target']['directory'],
+                        $copy['target']['commit'],
                     ),
                 );
             }, $data['copy']),

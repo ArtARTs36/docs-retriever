@@ -6,7 +6,7 @@ class ConfigCopy
 {
     public function __construct(
         public readonly string $source,
-        public readonly ConfigCopyTarget $target
+        public readonly ConfigCopyTarget $target,
     ) {
         //
     }
