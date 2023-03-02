@@ -17,8 +17,8 @@ class YamlLoader implements Loader
         $data = Yaml::parseFile($path);
 
         return new Config(
-            new ConfigSource($data['repositories']['source']['repository']),
-            new ConfigTarget($data['repositories']['source']['repository']),
+            new ConfigSource($data['repositories']['source']['repository'], $data['repositories']['source']['base_branch'] ?? null),
+            new ConfigTarget($data['repositories']['source']['repository'], $data['repositories']['source']['base_branch'] ?? null),
             array_map(function (array $copy) {
                 return new ConfigCopy(
                     $copy['source'],
