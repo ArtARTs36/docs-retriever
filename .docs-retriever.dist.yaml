@@ -3,8 +3,7 @@ repositories:
     repository: 'https://github.com/ArtARTs36/php-merge-request-linter'
 
   target:
-    repository: 'self'
-    base_branch: 'ev'
+    repository: 'https://github.com/mr-linter/site-frontend'
     token: 'env(DOCS_RETRIEVER_HTTP_TOKEN)'
 
 copy:
@@ -18,3 +17,4 @@ merge_request:
   title: 'Update docs'
   description: 'Updated docs from main repository'
   target_branch: 'master'
+  user: 'artarts36'
