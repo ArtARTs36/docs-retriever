@@ -11,6 +11,7 @@ use ArtARTs36\DocsRetriever\Config\ConfigTarget;
 use ArtARTs36\DocsRetriever\Config\Loader;
 use ArtARTs36\DocsRetriever\Config\MergeRequestConfig;
 use ArtARTs36\GitHandler\Data\Author;
+use ArtARTs36\Str\Str;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader implements Loader
@@ -21,7 +22,7 @@ class YamlLoader implements Loader
 
         return new Config(
             new ConfigSource($data['repositories']['source']['repository'], $data['repositories']['source']['base_branch'] ?? null),
-            new ConfigTarget($data['repositories']['target']['repository'], $data['repositories']['target']['base_branch'] ?? null),
+            $this->createTarget($data),
             array_map(function (array $copy) {
                 return $this->createConfigCopy($copy);
             }, $data['copy']),
@@ -31,6 +32,21 @@ class YamlLoader implements Loader
                 $data['merge_request']['target_branch'],
                 $data['merge_request']['user'],
             ),
+        );
+    }
+
+    private function createTarget(array $data): ConfigTarget
+    {
+        $token = Str::make($data['repositories']['target']['token']);
+
+        if ($token->startsWith('env(')) {
+            $token = getenv($token->between('env(', ')'));
+        }
+
+        return new ConfigTarget(
+            $data['repositories']['target']['repository'],
+            $data['repositories']['target']['base_branch'] ?? null,
+            $token,
         );
     }
 

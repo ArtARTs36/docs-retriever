@@ -13,13 +13,13 @@ class MergeRequestCreator
        //
     }
 
-    public function create(GitHandler $target, MergeRequestConfig $config): void
+    public function create(GitHandler $target, MergeRequestConfig $config, string $token): void
     {
         $repo = $target->urls()->toRepo();
 
         $this
             ->clientFactory
-            ->create($repo->url)
+            ->create($repo->url, $token)
             ->createMergeRequest(new MergeRequest(
                 $config->title,
                 $config->user,

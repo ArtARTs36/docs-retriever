@@ -36,7 +36,7 @@ class Retriever
 
         $targetGit->pushes()->push();
 
-        $this->mergeRequestCreator->create($targetGit, $config->mergeRequest);
+        $this->mergeRequestCreator->create($targetGit, $config->mergeRequest, $config->target->token);
     }
 
     private function createTemporaryBranch(): string

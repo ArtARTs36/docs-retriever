@@ -5,6 +5,7 @@ repositories:
   target:
     repository: 'self'
     base_branch: 'ev'
+    token: 'env(DOCS_RETRIEVER_HTTP_TOKEN)'
 
 copy:
   - source: 'docs/*.md'
