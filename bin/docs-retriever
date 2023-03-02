@@ -44,6 +44,6 @@ $retriever = new Retriever(
 );
 $loader = new Config\Loader\YamlLoader();
 
-$config = $loader->load(getcwd() . '/docs-retriever.yaml');
+$config = $loader->load(getcwd() . '/.docs-retriever.yaml');
 
 $retriever->retrieve($config);
