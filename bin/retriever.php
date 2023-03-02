@@ -20,6 +20,6 @@ $retriever = new Retriever(
 );
 $loader = new Config\Loader\YamlLoader();
 
-$config = $loader->load(__DIR__ . '/../docs-retriever.yaml');
+$config = $loader->load(getcwd() . '/docs-retriever.yaml');
 
 $retriever->retrieve($config);

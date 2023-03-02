@@ -17,33 +17,43 @@ class Creator
         //
     }
 
+    /**
+     * Create GitHandler by config of Repository.
+     */
     public function create(Repository $repository): GitHandler
     {
         if ($repository->isSelfRepository()) {
-            $git = $this->gitFactory->factory(getcwd());
-
-            try {
-                $git->branches()->switch($repository->branch);
-            } catch (AlreadySwitched) {
-                // suppress
-            }
-
-            return $git;
+            return $this->createSelfRepository($repository);
         }
 
-        $dir = $this->createTemporaryDirectory(uniqid());
+        $dir = $this->createTemporaryDirectory();
         $git = $this->gitFactory->factory($dir);
 
-        $git->setup()->clone($repository->repository, $repository->branch);
+        $git->setup()->clone($repository->repository, $repository->baseBranch);
 
         return $git;
     }
 
-    private function createTemporaryDirectory(string $repoName): string
+    private function createSelfRepository(Repository $repository): GitHandler
+    {
+        $git = $this->gitFactory->factory(getcwd());
+
+        if ($repository->baseBranch !== null) {
+            try {
+                $git->branches()->switch($repository->baseBranch);
+            } catch (AlreadySwitched) {
+                // suppress
+            }
+        }
+
+        return $git;
+    }
+
+    private function createTemporaryDirectory(): string
     {
         $root = $this->fileSystem->getTmpDir();
 
-        $dir = $root . '/temporary-repo-' . $repoName;
+        $dir = $root . '/temporary-repo-' . uniqid();
 
         if ($this->fileSystem->exists($dir)) {
             $this->fileSystem->removeDir($dir);

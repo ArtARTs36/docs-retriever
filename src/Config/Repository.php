@@ -7,8 +7,8 @@ abstract class Repository
     public const REPOSITORY_SELF = 'self';
 
     public function __construct(
-        public readonly string $repository,
-        public readonly ?string $branch,
+        public readonly string  $repository,
+        public readonly ?string $baseBranch,
     ) {
         //
     }
