@@ -18,13 +18,6 @@ $retriever = new Retriever(
     new \ArtARTs36\DocsRetriever\Copier($fs),
     new \ArtARTs36\DocsRetriever\GitHosting\MergeRequestCreator(
         new \ArtARTs36\DocsRetriever\GitHosting\ClientFactory(),
-        \ArtARTs36\GitHandler\Origin\Url\OriginUrlSelector::make(
-            [
-                new \ArtARTs36\GitHandler\Origin\Url\BitbucketOriginUrlBuilder(),
-                new \ArtARTs36\GitHandler\Origin\Url\GithubOriginUrlBuilder(),
-                new \ArtARTs36\GitHandler\Origin\Url\GitlabOriginUrlBuilder(),
-            ],
-        ),
     ),
 );
 $loader = new Config\Loader\YamlLoader();
