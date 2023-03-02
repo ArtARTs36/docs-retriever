@@ -32,15 +32,18 @@ if ($loaded === false) {
 
 $fs = new LocalFileSystem();
 
+$logger = new \ArtARTs36\DocsRetriever\EchoLogger();
+
 $retriever = new Retriever(
     new \ArtARTs36\DocsRetriever\Git\Creator(
         new CachedGitFactory(new LocalGitFactory()),
         $fs,
     ),
-    new \ArtARTs36\DocsRetriever\Copier($fs),
+    new \ArtARTs36\DocsRetriever\Copier($fs, $logger),
     new \ArtARTs36\DocsRetriever\GitHosting\MergeRequestCreator(
         new \ArtARTs36\DocsRetriever\GitHosting\ClientFactory(),
     ),
+    $logger,
 );
 $loader = new Config\Loader\YamlLoader();
 

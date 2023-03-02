@@ -5,17 +5,21 @@ namespace ArtARTs36\DocsRetriever;
 use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\FileSystem\Contracts\FileSystem;
 use ArtARTs36\GitHandler\Contracts\Handler\GitHandler;
+use Psr\Log\LoggerInterface;
 
 class Copier
 {
     public function __construct(
         private readonly FileSystem $fileSystem,
+        private readonly LoggerInterface $logger,
     ) {
         //
     }
 
     public function copy(Config $config, GitHandler $source, GitHandler $target): void
     {
+        $this->logger->info('[Copier] Started');
+
         $sourceDir = $source->getContext()->getRootDir();
 
         foreach ($config->copy as $copy) {
@@ -41,8 +45,15 @@ class Copier
                 $targetPaths[] = $targetPath;
             }
 
+            $this->logger->info(sprintf('[Copier] Copied files: [%s]', implode(', ', $targetPaths)));
+
             $target->index()->add($targetPaths);
+
+            $this->logger->info(sprintf('[Copier] Added to index: [%s]', implode(', ', $targetPaths)));
+
             $target->commits()->commit($conf->target->commit->message, author: $conf->target->commit->author);
+
+            $this->logger->info(sprintf('[Copier] Committed: [%s]', implode(', ', $targetPaths)));
         }
     }
 
