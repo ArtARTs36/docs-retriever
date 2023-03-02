@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 use ArtARTs36\DocsRetriever\Config;
@@ -6,7 +7,28 @@ use ArtARTs36\FileSystem\Local\LocalFileSystem;
 use ArtARTs36\GitHandler\Factory\CachedGitFactory;
 use ArtARTs36\GitHandler\Factory\LocalGitFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+
+$loaded = false;
+
+if (isset($_composer_autoload_path)) {
+    $loaded = true;
+
+    require $_composer_autoload_path;
+} else {
+    foreach ([$_composer_autoload_path ?? '../../..', '../..', '..', 'vendor', '../vendor', '../../vendor'] as $path) {
+        if (\is_file($autoload_file = __DIR__ . '/' . $path . '/autoload.php')) {
+            require $autoload_file;
+            $loaded = true;
+            break;
+        }
+    }
+}
+
+if ($loaded === false) {
+    fwrite(\STDERR, 'Composer autoload.php not found');
+
+    exit(1);
+}
 
 $fs = new LocalFileSystem();
 

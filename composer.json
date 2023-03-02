@@ -18,7 +18,7 @@
         "symfony/http-client": "^6.2"
     },
     "bin": [
-        "bin/retriever.php"
+        "bin/docs-retriever"
     ],
     "config": {
         "allow-plugins": {
