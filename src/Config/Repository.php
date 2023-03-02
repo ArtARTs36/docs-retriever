@@ -8,6 +8,7 @@ abstract class Repository
 
     public function __construct(
         public readonly string $repository,
+        public readonly ?string $branch,
     ) {
         //
     }

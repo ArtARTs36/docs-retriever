@@ -4,7 +4,6 @@ namespace ArtARTs36\DocsRetriever;
 
 use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\DocsRetriever\Git\Creator;
-use ArtARTs36\FileSystem\Contracts\FileSystem;
 use ArtARTs36\GitHandler\Exceptions\BranchAlreadyExists;
 
 class Retriever
@@ -12,7 +11,6 @@ class Retriever
     public function __construct(
         private readonly Creator $creator,
         private readonly Copier $copier,
-        private readonly FileSystem $fileSystem,
     ) {
         //
     }
@@ -20,10 +18,6 @@ class Retriever
     public function retrieve(Config $config): void
     {
         $sourceGit = $this->creator->create($config->source);
-        $sourceDir = $sourceGit->getContext()->getRootDir();
-
-        $sourceGit->setup()->clone($config->source->repository);
-
         $targetGit = $this->creator->create($config->target);
 
         $targetBranch = $this->createTemporaryBranch();
