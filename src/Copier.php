@@ -32,6 +32,12 @@ class Copier
 
         foreach ($config->copy as $conf) {
             if ($conf->target->commit->author !== null) {
+                $this->logger->info(sprintf(
+                    '[Copier] set user: [%s, %s]',
+                    $conf->target->commit->author->name,
+                    $conf->target->commit->author->email,
+                ));
+
                 $target->config()->set('user', 'name', $conf->target->commit->author->name);
                 $target->config()->set('user', 'email', $conf->target->commit->author->email);
             }
