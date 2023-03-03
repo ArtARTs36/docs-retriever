@@ -11,6 +11,6 @@ class EchoLogger implements LoggerInterface
 
     public function log($level, \Stringable|string $message, array $context = []): void
     {
-        fwrite(\STDOUT, sprintf('[%s] %s', $level, $message) . "\n");
+        fwrite(\STDOUT, sprintf('[%s] %s. Context: %s', $level, $message, json_encode($context)) . "\n");
     }
 }

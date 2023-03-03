@@ -14,10 +14,18 @@ class GithubClient implements GitHostingClient
         //
     }
 
-    public function createMergeRequest(MergeRequest $request): void
+    public function createMergeRequest(MergeRequestInput $request): MergeRequest
     {
         $this->logger->info(
             sprintf('[GithubClient] creating merge request to %s/%s', $request->repositoryOwner, $request->repositoryName),
+            [
+                'owner' => $request->repositoryOwner,
+                'repo' => $request->repositoryOwner,
+                'title' => $request->title,
+                'base' => $request->targetBranch,
+                'head' => $request->sourceBranch,
+                'body' => $request->description,
+            ],
         );
 
         $result = $this->client->pullRequest()->create(
@@ -31,10 +39,10 @@ class GithubClient implements GitHostingClient
             ],
         );
 
-        $this->logger->info(sprintf(
-        '[GithubClient] Merge Request was created with id %s. Url: %s',
-        $result['number'] ?? '0',
-            $result['html_url'] ?? '',
-        ));
+        $this->logger->info('[GithubClient] Merge Request was created', [
+            'merge_request' => $result,
+        ]);
+
+        return new MergeRequest($result['number'] ?? '0', $result['html_url'] ?? '');
     }
 }

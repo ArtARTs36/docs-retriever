@@ -6,7 +6,6 @@ use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\DocsRetriever\Git\Creator;
 use ArtARTs36\DocsRetriever\GitHosting\MergeRequestCreator;
 use ArtARTs36\GitHandler\Exceptions\BranchAlreadyExists;
-use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use Psr\Log\LoggerInterface;
 
 class Retriever
@@ -48,7 +47,7 @@ class Retriever
         }
 
         $this->logger->info(
-            sprintf('Try push new commits to: %s as user[%s]',
+            sprintf('[Retriever] Try push new commits to: %s as user[%s]',
                 $targetGit->urls()->toRepo()->url,
                 implode(', ', $targetGit->config()->getSubject('user')->toArray()),
             ),

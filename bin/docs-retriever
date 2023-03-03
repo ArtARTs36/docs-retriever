@@ -42,6 +42,7 @@ $retriever = new Retriever(
     new \ArtARTs36\DocsRetriever\Copier($fs, $logger),
     new \ArtARTs36\DocsRetriever\GitHosting\MergeRequestCreator(
         new \ArtARTs36\DocsRetriever\GitHosting\ClientFactory($logger),
+        $logger,
     ),
     $logger,
 );
