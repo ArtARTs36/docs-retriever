@@ -21,9 +21,10 @@ class Copier
         $this->logger->info('[Copier] Started');
 
         $sourceDir = $source->getContext()->getRootDir();
+        $targetRoot = $target->getContext()->getRootDir();
 
         foreach ($config->copy as $copy) {
-            $this->checkTargetDir($copy->target->directory);
+            $this->checkTargetDir($targetRoot . DIRECTORY_SEPARATOR . $copy->target->directory);
         }
 
         foreach ($config->copy as $conf) {
@@ -38,7 +39,7 @@ class Copier
             foreach (glob($sourcePath) as $filePath) {
                 $fileName = pathinfo($filePath, PATHINFO_BASENAME);
 
-                $targetPath = $conf->target->directory . DIRECTORY_SEPARATOR . $fileName;
+                $targetPath = $targetRoot . DIRECTORY_SEPARATOR . $conf->target->directory . DIRECTORY_SEPARATOR . $fileName;
 
                 copy($filePath, $targetPath);
 
