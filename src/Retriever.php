@@ -41,7 +41,11 @@ class Retriever
 
         $this->logger->info(sprintf('[Retriever] Switched to target branch: "%s"', $targetBranch));
 
-        $this->copier->copy($config, $sourceGit, $targetGit);
+        $modified = $this->copier->copy($config, $sourceGit, $targetGit);
+
+        if (! $modified) {
+            $this->logger->info('[Retriever] no found modified files');
+        }
 
         $this->logger->info(
             sprintf('Try push new commits to: %s as user[%s]',
