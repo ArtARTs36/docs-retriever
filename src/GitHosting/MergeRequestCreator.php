@@ -22,7 +22,7 @@ class MergeRequestCreator
             ->create($repo->url, $token)
             ->createMergeRequest(new MergeRequest(
                 $config->title,
-                $config->user,
+                $repo->user,
                 $repo->name,
                 $target->branches()->current(),
                 $config->targetBranch,
