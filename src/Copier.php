@@ -16,10 +16,7 @@ class Copier
         //
     }
 
-    /**
-     * @return bool has modified files
-     */
-    public function copy(Config $config, GitHandler $source, GitHandler $target): bool
+    public function copy(Config $config, GitHandler $source, GitHandler $target): CopyResult
     {
         $this->logger->info('[Copier] Started');
 
@@ -31,6 +28,7 @@ class Copier
         }
 
         $modified = false;
+        $resultFiles = [];
 
         foreach ($config->copy as $conf) {
             if ($conf->target->commit->author !== null) {
@@ -43,12 +41,14 @@ class Copier
 
             foreach (glob($sourcePath) as $filePath) {
                 $fileName = pathinfo($filePath, PATHINFO_BASENAME);
+                $dirFile = $conf->target->directory . DIRECTORY_SEPARATOR . $fileName;
 
-                $targetPath = $targetRoot . DIRECTORY_SEPARATOR . $conf->target->directory . DIRECTORY_SEPARATOR . $fileName;
+                $targetPath = $targetRoot . DIRECTORY_SEPARATOR . $dirFile;
 
                 copy($filePath, $targetPath);
 
                 $targetPaths[] = $targetPath;
+                $resultFiles[] = $dirFile;
             }
 
             $this->logger->info(sprintf('[Copier] Copied files: [%s]', implode(', ', $targetPaths)));
@@ -68,7 +68,7 @@ class Copier
             $this->logger->info(sprintf('[Copier] Committed: [%s]', implode(', ', $targetPaths)));
         }
 
-        return $modified;
+        return new CopyResult($modified, $resultFiles);
     }
 
     private function checkTargetDir(string $dir): void
