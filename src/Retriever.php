@@ -55,7 +55,7 @@ class Retriever
 
         $targetGit->pushes()->pushOnAutoSetUpStream();
 
-        $this->mergeRequestCreator->create($targetGit, $config->mergeRequest, $config->target->token);
+        $this->mergeRequestCreator->create($targetGit, $config->mergeRequest, $config->target->token, $copyResult->files);
     }
 
     private function createTemporaryBranch(): string

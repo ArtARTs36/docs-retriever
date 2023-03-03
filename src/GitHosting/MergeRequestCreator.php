@@ -3,6 +3,7 @@
 namespace ArtARTs36\DocsRetriever\GitHosting;
 
 use ArtARTs36\DocsRetriever\Config\MergeRequestConfig;
+use ArtARTs36\DocsRetriever\Renderer;
 use ArtARTs36\GitHandler\Contracts\Handler\GitHandler;
 use Psr\Log\LoggerInterface;
 
@@ -11,11 +12,15 @@ class MergeRequestCreator
     public function __construct(
         private readonly ClientFactory $clientFactory,
         private readonly LoggerInterface $logger,
+        private readonly Renderer $renderer,
     ) {
        //
     }
 
-    public function create(GitHandler $target, MergeRequestConfig $config, string $token): void
+    /**
+     * @param array<string> $files
+     */
+    public function create(GitHandler $target, MergeRequestConfig $config, string $token, array $files): void
     {
         $repo = $target->urls()->toRepo();
 
@@ -32,7 +37,9 @@ class MergeRequestCreator
                 $repo->name,
                 $target->branches()->current(),
                 $config->targetBranch,
-                $config->message,
+                $this->renderer->render($config->message, [
+                    'files' => $files,
+                ]),
             ));
 
         $this->logger->info(sprintf(

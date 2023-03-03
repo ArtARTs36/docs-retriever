@@ -38,6 +38,7 @@ class Copier
 
             $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $conf->source;
             $targetPaths = [];
+            $partHasModified = false;
 
             foreach (glob($sourcePath) as $filePath) {
                 $fileName = pathinfo($filePath, PATHINFO_BASENAME);
@@ -45,17 +46,23 @@ class Copier
 
                 $targetPath = $targetRoot . DIRECTORY_SEPARATOR . $dirFile;
 
+                $prevHash = $this->fileSystem->exists($targetPath) ? md5_file($targetPath) : null;
+
                 copy($filePath, $targetPath);
 
+                if ($prevHash !== md5_file($targetPath)) {
+                    $resultFiles[] = $dirFile;
+                    $partHasModified = true;
+                }
+
                 $targetPaths[] = $targetPath;
-                $resultFiles[] = $dirFile;
             }
 
             $this->logger->info(sprintf('[Copier] Copied files: [%s]', implode(', ', $targetPaths)));
 
             $target->index()->add($targetPaths);
 
-            if (! $target->statuses()->hasChanges()) {
+            if (! $partHasModified) {
                 continue;
             }
 

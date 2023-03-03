@@ -16,7 +16,8 @@
         "symfony/yaml": "^6.2",
         "knplabs/github-api": "^3.9",
         "symfony/http-client": "^6.2",
-        "psr/log": "^3.0"
+        "psr/log": "^3.0",
+        "twig/twig": "^3.5"
     },
     "bin": [
         "bin/docs-retriever"
