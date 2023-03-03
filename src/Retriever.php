@@ -6,6 +6,7 @@ use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\DocsRetriever\Git\Creator;
 use ArtARTs36\DocsRetriever\GitHosting\MergeRequestCreator;
 use ArtARTs36\GitHandler\Exceptions\BranchAlreadyExists;
+use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use Psr\Log\LoggerInterface;
 
 class Retriever
@@ -38,9 +39,18 @@ class Retriever
 
         $targetGit->branches()->switch($targetBranch);
 
+        $this->logger->info(sprintf('[Retriever] Switched to target branch: "%s"', $targetBranch));
+
         $this->copier->copy($config, $sourceGit, $targetGit);
 
-        $targetGit->pushes()->push();
+        $this->logger->info(
+            sprintf('Try push new commits to: %s as user[%s]',
+                $targetGit->urls()->toRepo()->url,
+                implode(', ', $targetGit->config()->getSubject('user')->toArray()),
+            ),
+        );
+
+        $targetGit->pushes()->pushOnAutoSetUpStream();
 
         $this->mergeRequestCreator->create($targetGit, $config->mergeRequest, $config->target->token);
     }
