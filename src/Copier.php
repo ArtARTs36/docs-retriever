@@ -5,6 +5,7 @@ namespace ArtARTs36\DocsRetriever;
 use ArtARTs36\DocsRetriever\Config\Config;
 use ArtARTs36\FileSystem\Contracts\FileSystem;
 use ArtARTs36\GitHandler\Contracts\Handler\GitHandler;
+use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use Psr\Log\LoggerInterface;
 
 class Copier
@@ -76,7 +77,21 @@ class Copier
 
             $this->logger->info(sprintf('[Copier] Added to index: [%s]', implode(', ', $targetPaths)));
 
-            $target->commits()->commit($conf->target->commit->message, author: $conf->target->commit->author);
+            try {
+                $target->commits()->commit($conf->target->commit->message, author: $conf->target->commit->author);
+            } catch (CommandFailed $e) {
+                $this->logger->info(
+                    sprintf(
+                        '[Copier] Committing failed: %s',
+                        $e->commandResult->getError(),
+                    ),
+                    [
+                        'command' => $e->commandResult->getCommandLine(),
+                    ],
+                );
+
+                throw $e;
+            }
 
             $this->logger->info(sprintf('[Copier] Committed: [%s]', implode(', ', $targetPaths)));
         }
