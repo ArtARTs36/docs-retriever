@@ -43,7 +43,7 @@ class MergeRequestCreator
             ));
 
         $this->logger->info(sprintf(
-            '[MergeRequestCreator] Merge Request was created with id %s. Url: %s',
+            '[MergeRequestCreator] Merge Request was created with id %s. Url: %s .',
             $request->id,
             $request->url,
         ));

@@ -44,7 +44,14 @@ class Retriever
 
         if (! $copyResult->modified) {
             $this->logger->info('[Retriever] no found modified files');
+
+            return;
         }
+
+        $this->logger->info(sprintf(
+            '[Retriever] defined modified files: [%s]',
+            implode(', ', $copyResult->files),
+        ));
 
         $this->logger->info(
             sprintf('[Retriever] Try push new commits to: %s as user[%s]',
